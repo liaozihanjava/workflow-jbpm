@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<definitions id="Definition"
+             targetNamespace="http://www.jboss.org/drools"
+             typeLanguage="http://www.java.com/javaTypes"
+             expressionLanguage="http://www.mvel.org/2.0"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+             xmlns:g="http://www.jboss.org/drools/flow/gpd"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:tns="http://www.jboss.org/drools">
+
+  <itemDefinition id="_student" />
+  <itemDefinition id="_caseDetail" />
+  <itemDefinition id="_caseID" />
+  <itemDefinition id="_caseReason" />
+  <itemDefinition id="_depaOpinion" />
+  <itemDefinition id="_teacher" />
+  <itemDefinition id="_day" />
+  <itemDefinition id="_headmaster" />
+  <itemDefinition id="_reason" />
+
+  <process processType="Private" isExecutable="true" id="com.sample.bpmn.workflow" name="Hello World" >
+
+    <!-- process variables -->
+    <property id="student" itemSubjectRef="null"/>
+    <property id="caseDetail" itemSubjectRef="null"/>
+    <property id="caseID" itemSubjectRef="null"/>
+    <property id="caseReason" itemSubjectRef="null"/>
+    <property id="depaOpinion" itemSubjectRef="null"/>
+    <property id="teacher" itemSubjectRef="null"/>
+    <property id="day" itemSubjectRef="null"/>
+    <property id="headmaster" itemSubjectRef="null"/>
+    <property id="reason" itemSubjectRef="null"/>
+
+    <!-- nodes -->
+    <scriptTask id="_2" name="Hello" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("The Student want to leave");</script>
+    </scriptTask>
+    <startEvent id="_1"  isInterrupting="true"/>
+    <userTask id="_jbpm-unique-34" name="write" >
+      <extensionElements>
+        <tns:onEntry-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println("The student is writing the note");</tns:script>
+        </tns:onEntry-script>
+        <tns:onExit-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println("Write over, judge the leaving day whether more than one day");</tns:script>
+        </tns:onExit-script>
+      </extensionElements>
+      <ioSpecification>
+        <dataInput id="_jbpm-unique-34_TaskNameInput" name="TaskName" />
+        <dataOutput id="_jbpm-unique-34_caseDetailOutput" name="caseDetail" />
+        <inputSet>
+          <dataInputRefs>_jbpm-unique-34_TaskNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_jbpm-unique-34_caseDetailOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-34_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">write</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-34_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_jbpm-unique-34_caseDetailOutput</sourceRef>
+        <targetRef>caseDetail</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>john</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <endEvent id="_jbpm-unique-35" name="End" >
+        <terminateEventDefinition />
+    </endEvent>
+    <exclusiveGateway id="_jbpm-unique-36" name="Gateway" gatewayDirection="Diverging" />
+    <userTask id="_jbpm-unique-37" name="lessday" >
+      <extensionElements>
+        <tns:onEntry-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println("The day is less than 1");</tns:script>
+        </tns:onEntry-script>
+        <tns:onExit-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println("Teacher agree to leave");</tns:script>
+        </tns:onExit-script>
+      </extensionElements>
+      <ioSpecification>
+        <dataInput id="_jbpm-unique-37_TaskNameInput" name="TaskName" />
+        <dataOutput id="_jbpm-unique-37_caseReasonOutput" name="caseReason" />
+        <inputSet>
+          <dataInputRefs>_jbpm-unique-37_TaskNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_jbpm-unique-37_caseReasonOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-37_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">lessday</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-37_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_jbpm-unique-37_caseReasonOutput</sourceRef>
+        <targetRef>caseReason</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>mary</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <userTask id="_jbpm-unique-38" name="moreday" >
+      <extensionElements>
+        <tns:onEntry-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println(" The day is more than 1");</tns:script>
+        </tns:onEntry-script>
+        <tns:onExit-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println("Judge whether the student has the right reason");</tns:script>
+        </tns:onExit-script>
+      </extensionElements>
+      <ioSpecification>
+        <dataInput id="_jbpm-unique-38_TaskNameInput" name="TaskName" />
+        <dataOutput id="_jbpm-unique-38_depaOpinionOutput" name="depaOpinion" />
+        <inputSet>
+          <dataInputRefs>_jbpm-unique-38_TaskNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_jbpm-unique-38_depaOpinionOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-38_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">moreday</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-38_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_jbpm-unique-38_depaOpinionOutput</sourceRef>
+        <targetRef>depaOpinion</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>krisv</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <exclusiveGateway id="_jbpm-unique-39" name="Gateway" gatewayDirection="Diverging" />
+    <userTask id="_jbpm-unique-43" name="rightreason" >
+      <extensionElements>
+        <tns:onEntry-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println("The student has the right reason");</tns:script>
+        </tns:onEntry-script>
+        <tns:onExit-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println("Teacher agree to leave");</tns:script>
+        </tns:onExit-script>
+      </extensionElements>
+      <ioSpecification>
+        <dataInput id="_jbpm-unique-43_TaskNameInput" name="TaskName" />
+        <dataOutput id="_jbpm-unique-43_caseReasonOutput" name="caseReason" />
+        <inputSet>
+          <dataInputRefs>_jbpm-unique-43_TaskNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_jbpm-unique-43_caseReasonOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-43_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">rightreason</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-43_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_jbpm-unique-43_caseReasonOutput</sourceRef>
+        <targetRef>caseReason</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>mary</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <userTask id="_jbpm-unique-44" name="wrongreason" >
+      <extensionElements>
+        <tns:onEntry-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println("The student doesn't have the right reason");</tns:script>
+        </tns:onEntry-script>
+        <tns:onExit-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println("Headmaster disagree to leave");</tns:script>
+        </tns:onExit-script>
+      </extensionElements>
+      <ioSpecification>
+        <dataInput id="_jbpm-unique-44_TaskNameInput" name="TaskName" />
+        <dataOutput id="_jbpm-unique-44_depaOpinionOutput" name="depaOpinion" />
+        <inputSet>
+          <dataInputRefs>_jbpm-unique-44_TaskNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_jbpm-unique-44_depaOpinionOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-44_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">wrongreason</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-44_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_jbpm-unique-44_depaOpinionOutput</sourceRef>
+        <targetRef>depaOpinion</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>krisv</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <exclusiveGateway id="_jbpm-unique-45" name="Gateway" gatewayDirection="Converging" />
+    <scriptTask id="_jbpm-unique-48" name="Script" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("The result has been published");</script>
+    </scriptTask>
+
+    <!-- connections -->
+    <sequenceFlow id="_1-_2" sourceRef="_1" targetRef="_2" />
+    <sequenceFlow id="_2-_jbpm-unique-34" sourceRef="_2" targetRef="_jbpm-unique-34" />
+    <sequenceFlow id="_jbpm-unique-48-_jbpm-unique-35" sourceRef="_jbpm-unique-48" targetRef="_jbpm-unique-35" />
+    <sequenceFlow id="_jbpm-unique-34-_jbpm-unique-36" sourceRef="_jbpm-unique-34" targetRef="_jbpm-unique-36" />
+    <sequenceFlow id="_jbpm-unique-36-_jbpm-unique-37" sourceRef="_jbpm-unique-36" targetRef="_jbpm-unique-37" name="lessthan1" tns:priority="2" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return day.equals(1);</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_jbpm-unique-36-_jbpm-unique-38" sourceRef="_jbpm-unique-36" targetRef="_jbpm-unique-38" name="morethan1" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return day.equals(3);</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_jbpm-unique-38-_jbpm-unique-39" sourceRef="_jbpm-unique-38" targetRef="_jbpm-unique-39" />
+    <sequenceFlow id="_jbpm-unique-39-_jbpm-unique-43" sourceRef="_jbpm-unique-39" targetRef="_jbpm-unique-43" name="rightreason" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return reason.equals("true");</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_jbpm-unique-39-_jbpm-unique-44" sourceRef="_jbpm-unique-39" targetRef="_jbpm-unique-44" name="wrongreason" tns:priority="2" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return reason.equals("wrong");</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_jbpm-unique-37-_jbpm-unique-45" sourceRef="_jbpm-unique-37" targetRef="_jbpm-unique-45" />
+    <sequenceFlow id="_jbpm-unique-43-_jbpm-unique-45" sourceRef="_jbpm-unique-43" targetRef="_jbpm-unique-45" />
+    <sequenceFlow id="_jbpm-unique-44-_jbpm-unique-45" sourceRef="_jbpm-unique-44" targetRef="_jbpm-unique-45" />
+    <sequenceFlow id="_jbpm-unique-45-_jbpm-unique-48" sourceRef="_jbpm-unique-45" targetRef="_jbpm-unique-48" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram>
+    <bpmndi:BPMNPlane bpmnElement="com.sample.bpmn.workflow" >
+      <bpmndi:BPMNShape bpmnElement="_2" >
+        <dc:Bounds x="11" y="96" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_1" >
+        <dc:Bounds x="24" y="16" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-34" >
+        <dc:Bounds x="153" y="98" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-35" >
+        <dc:Bounds x="772" y="73" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-36" >
+        <dc:Bounds x="303" y="103" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-37" >
+        <dc:Bounds x="433" y="102" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-38" >
+        <dc:Bounds x="218" y="212" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-39" >
+        <dc:Bounds x="376" y="215" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-43" >
+        <dc:Bounds x="457" y="186" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-44" >
+        <dc:Bounds x="501" y="326" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-45" >
+        <dc:Bounds x="611" y="146" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-48" >
+        <dc:Bounds x="688" y="131" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_1-_2" >
+        <di:waypoint x="48" y="40" />
+        <di:waypoint x="51" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_2-_jbpm-unique-34" >
+        <di:waypoint x="51" y="120" />
+        <di:waypoint x="203" y="122" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-48-_jbpm-unique-35" >
+        <di:waypoint x="728" y="155" />
+        <di:waypoint x="796" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-34-_jbpm-unique-36" >
+        <di:waypoint x="203" y="122" />
+        <di:waypoint x="327" y="127" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-36-_jbpm-unique-37" >
+        <di:waypoint x="327" y="127" />
+        <di:waypoint x="483" y="126" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-36-_jbpm-unique-38" >
+        <di:waypoint x="327" y="127" />
+        <di:waypoint x="268" y="236" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-38-_jbpm-unique-39" >
+        <di:waypoint x="268" y="236" />
+        <di:waypoint x="400" y="239" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-39-_jbpm-unique-43" >
+        <di:waypoint x="400" y="239" />
+        <di:waypoint x="507" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-39-_jbpm-unique-44" >
+        <di:waypoint x="400" y="239" />
+        <di:waypoint x="551" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-37-_jbpm-unique-45" >
+        <di:waypoint x="483" y="126" />
+        <di:waypoint x="635" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-43-_jbpm-unique-45" >
+        <di:waypoint x="507" y="210" />
+        <di:waypoint x="635" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-44-_jbpm-unique-45" >
+        <di:waypoint x="551" y="350" />
+        <di:waypoint x="635" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-45-_jbpm-unique-48" >
+        <di:waypoint x="635" y="170" />
+        <di:waypoint x="728" y="155" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+
+</definitions>
